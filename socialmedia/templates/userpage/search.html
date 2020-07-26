@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="container my-4">
+    {% if object_list %}
+        {% for i in object_list %}
+        
+            <div class="card" style="margin-top:2px;">
+                <div class="card-body">
+                    <h2 style="float:left">{{i}}</h2>
+                    <a role="button" class="btn btn-outline-primary" style="float:right" type="button
+                    " href="{% url 'Profile' i.username %}">View Profile</a>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div style="text-align:center; margin-top:10px; ">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a role="button" class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" role="button"  class="btn btn-outline-primary"><<</a>
+                    {% endif %}
+            
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" role="button"  class="btn btn-outline-primary" >>></a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" role="button" class="btn btn-outline-primary" >last &raquo;</a>
+                    {% endif %}
+                </span>
+        </div>
+  {%else%}:
+    <h2 style="text-align:center; color:blanchedalmond; margin-top:250px;">No user found</h2>
+  {% endif %}
+    
+  </div>
+{% endblock body %}

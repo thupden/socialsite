@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block nav-btn %}
+    <button type="button" class="btn btn-outline-primary mx-1" data-toggle="modal" data-target="#staticBackdrop">
+        Login
+    </button>
+    
+{% endblock nav-btn %}
+
+{% block body %}
+    
+    <div class="container my-4"> 
+        <h3>Create An Account</h3>
+        <form method ="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <div class="form-group my-4">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" name='email' required>
+            </div>
+            <div class="form-group my-4">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Your name here" name='name' required>
+            </div>
+            <div class="form-group my-4">
+                <label for="username">User Name</label>
+                <input type="text" class="form-control" id="username" placeholder="Your user name here" name='username' required>
+            </div>
+            
+            <div class="form-group my-4">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Your password" name='password1'required>
+            </div>
+            <div class="form-group my-4">
+                <label for="password">Confirm Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Confirm password" name='password2' required>
+            </div>
+            <button type="submit" class="btn btn-primary">Signup</button>
+        </form>
+    </div>
+ 
+{% endblock body %}
+

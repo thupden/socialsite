@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container my-4">
+    <form method="POST" action="{% url 'comment' context.post.pk %}">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ context.form.body }}
+        <button class="btn btn-primary" type="submit" style="float:right; margin-top:5px;"><i class="fa fa-paper-plane" aria-hidden="true"></i> Comment</button>
+      </div>
+     
+        
+    </form>
+  </div>
+  <div class="container">
+    `<div class="card">
+      {% if context.comment %}
+         {% for comments in context.comment %}
+         
+         <div class='container my-3'>
+          <p style="line-height:10px; font-size:18px;"><a href="{% url 'Profile' comments.user %}">{{comments.user}}</a>  <i style="font-weight:100; font-size:12px;">  {{comments.time.date}} </i> </p>
+          <p style="line-height:10px;">{{comments.comment}}</p>
+          <hr>
+         </div>
+         {% endfor %}
+      {% else %}
+      <div class="card">
+        <h5 style="text-align:center; margin-top:30px; margin-bottom:30px; color:burlywood;">No comments!</h5>
+      </div>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+  if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+  }
+  </script>
+{% endblock js %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    .userimage{
+        width:200px;
+        height:200px;
+        border-radius:50%;
+    }
+    hr{
+        border-top:2px solid #000000;
+        border-radius:25px;
+    }
+    .propost{
+        width:350px;
+        height:250px;
+        margin-bottom:30px
+    }
+{%endblock css %}
+{% block body %}
+<div class="container my-4">
+    <div class="media">
+        <img src="{{data.user_img.url}}" class="align-self-start mr-3 userimage" alt="profile">
+        <div class="media-body">
+            <h5 class="mt-0">{{data.username}}</h5>
+            {% if data.connection and request.user != data.username %}
+                <a href="{% url 'follow' data.username%}" class="btn btn-outline-primary" type="submit" role="button" id="follow">Unfollow</a>
+            {% elif not data.connection and request.user != data.username %}
+                <a href="{% url 'follow' data.username%}" class="btn btn-outline-primary" type="submit" role="button" id="follow">Follow</a>
+            {%else%}
+            <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#profile_edit">Edit Profile</button>
+            <!-- Modal -->
+            <div class="modal fade" id="profile_edit" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Edit Profile</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'Profile' data.username %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                <label for="profile_img">Change Profile Image</label>
+                                <input type="file" class="form-control-file" id="profile_img" name="prof_image">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_bio">Bio:</label>
+                                    <br>
+                                    <textarea name="bio" id="user_bio" cols="55" rows="10" placeholder="Your bio"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="connection">Web Url:</label>
+                                    <br>
+                                    <input type="text" name="connect" id="connection">
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <p>Followers: {{data.followers}} Following: {{data.following}}</p>
+            <p><b>{{data.bio}}</b></p>
+            <a href="http://www.{{data.con}}"target="_blank">{{data.con}}</a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        {% for i in data.posts %}     
+            {% for j in i %}
+                {% for k in j %}
+                <div class="col-md-4">
+                    <img src="{{k.image.url}}" alt="{{k}}" class="propost">
+                </div>
+                {% endfor %}
+          
+            {% endfor %}
+     
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock body %}
+
+{% block js %}
+<script>
+    $("#follow").click(function(e){
+        e.preventDefault()
+        var href = this.href
+
+        $.ajax({
+            url: href,
+            success : function(response){
+                if(response["following"]){
+                    $("#follow").html("Unfollow")
+                }
+                else{
+                    $("#follow").html("Follow")
+                }
+            }
+        })
+    })
+</script>
+{% endblock js %}
